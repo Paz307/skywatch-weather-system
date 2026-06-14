@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login — SkyWatch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    :root {
+      --gold: #f5c842; --dark: #0b1e30;
+      --glass: rgba(255,255,255,0.1);
+      --glass-border: rgba(255,255,255,0.22);
+      --text: #f0f6ff;
+    }
+    body {
+      min-height: 100vh; font-family: 'Lato', sans-serif; color: var(--text);
+      background: url('../images/bg.png') center/cover no-repeat fixed;
+      display: flex; align-items: center; justify-content: center;
+    }
+    body::before {
+      content:''; position:fixed; inset:0;
+      background: linear-gradient(160deg, rgba(11,30,48,0.75) 0%, rgba(26,111,168,0.4) 100%);
+    }
+    .login-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 420px; padding: 20px;
+    }
+    .login-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(22px);
+      border-radius: 24px; padding: 48px 40px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+      animation: fadeUp 0.7s ease both;
+    }
+    .login-brand {
+      text-align: center; margin-bottom: 36px;
+    }
+    .login-brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900; color: var(--gold);
+    }
+    .login-brand p { font-size:0.8rem; letter-spacing:2px; text-transform:uppercase; opacity:0.6; margin-top:4px; }
+    label { display:block; font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; opacity:0.7; margin-bottom:6px; }
+    .field { margin-bottom: 20px; }
+    input[type="text"], input[type="password"] {
+      width:100%; padding:14px 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px; color:#fff;
+      font-family:'Lato',sans-serif; font-size:0.95rem; outline:none;
+      transition: all 0.3s;
+    }
+    input:focus {
+      border-color: var(--gold); background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 0 3px rgba(245,200,66,0.2);
+    }
+    input::placeholder { color:rgba(255,255,255,0.4); }
+    .login-btn {
+      width:100%; padding:15px;
+      border:none; cursor:pointer; border-radius:12px;
+      background: linear-gradient(135deg,var(--gold),#e8a400);
+      color: var(--dark); font-family:'Playfair Display',serif;
+      font-size:1.05rem; font-weight:700; letter-spacing:1px;
+      transition: all 0.3s; margin-top:6px;
+    }
+    .login-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,200,66,0.4); }
+    .error-msg {
+      display:none; background:rgba(192,57,43,0.3);
+      border:1px solid rgba(192,57,43,0.5); border-radius:10px;
+      padding:12px 16px; font-size:0.87rem;
+      margin-top:16px; text-align:center; color:#ff8a80;
+    }
+    .back-link {
+      display:block; text-align:center; margin-top:24px;
+      color:rgba(255,255,255,0.6); text-decoration:none;
+      font-size:0.85rem; letter-spacing:1px;
+      transition:color 0.3s;
+    }
+    .back-link:hover { color:var(--gold); }
+    .hint { font-size:0.75rem; opacity:0.5; margin-top:8px; text-align:center; }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    /* ── LIGHT THEME ── */
+    body.theme-light .login-card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(11,30,48,0.12);
+      color: var(--dark);
+    }
+    body.theme-light .login-brand h1 { color:#c9970c; }
+    body.theme-light .login-brand p,
+    body.theme-light label,
+    body.theme-light .hint,
+    body.theme-light .back-link { color: rgba(11,30,48,0.6); }
+    body.theme-light input[type="text"],
+    body.theme-light input[type="password"] {
+      background: rgba(11,30,48,0.05);
+      border: 1px solid rgba(11,30,48,0.15);
+      color: var(--dark);
+    }
+    body.theme-light input::placeholder { color: rgba(11,30,48,0.35); }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <h1>SkyWatch</h1>
+        <p>Administrator Portal</p>
+      </div>
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="admin" autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="error-msg" id="error-msg">❌ Invalid username or password. Please try again.</div>
+     
+      <a href="../index.html" class="back-link">← Back to Weather Search</a>
+    </div>
+  </div>
+  <script>
+    // Apply saved theme
+    if ((localStorage.getItem('adminTheme') || 'dark') === 'light') {
+      document.body.classList.add('theme-light');
+    }
+
+    // Pre-fill admin if first time
+    if (!localStorage.getItem('adminUser')) {
+      localStorage.setItem('adminUser', JSON.stringify({ username:'admin', password:'admin123' }));
+    }
+
+    function doLogin() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      const admin = JSON.parse(localStorage.getItem('adminUser'));
+      if (u === admin.username && p === admin.password) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        window.location.href = 'dashboard.html';
+      } else {
+        document.getElementById('error-msg').style.display = 'block';
+      }
+    }
+
+    document.getElementById('password').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
+  </script>
+</body>
+</html>
